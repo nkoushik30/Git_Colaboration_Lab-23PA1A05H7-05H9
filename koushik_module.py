@@ -36,14 +36,27 @@ class UserManager:
         print("-" * 40)
         return self.users
 
-def authenticate_user(username, password):
-    """Authenticate user credentials"""
+def authenticate_user(user_manager, username, password):
+    """
+    Authenticate user credentials
+    
+    Note: This is a simplified educational implementation.
+    In production, use proper password hashing and secure authentication.
+    """
     print(f"Authenticating user: {username}")
-    # Simplified authentication logic
-    if username and password:
+    
+    # Check if user exists in the system
+    user = user_manager.get_user(username)
+    if not user:
+        print("Authentication failed: User not found!")
+        return False
+    
+    # Simplified password check (In production: use bcrypt/hashing)
+    if password and len(password) >= 6:  # Basic password validation
         print("Authentication successful!")
         return True
-    print("Authentication failed!")
+    
+    print("Authentication failed: Invalid password!")
     return False
 
 if __name__ == "__main__":
@@ -56,4 +69,8 @@ if __name__ == "__main__":
     manager.add_user("admin", "admin@example.com")
     manager.list_users()
     
-    authenticate_user("koushik", "password123")
+    # Authenticate registered user
+    print("\nTesting authentication:")
+    authenticate_user(manager, "koushik", "password123")
+    authenticate_user(manager, "nonexistent", "password123")
+    authenticate_user(manager, "admin", "short")
